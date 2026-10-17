@@ -16,10 +16,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://lh3.googleusercontent.com">
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script>(function(){var t;try{t=localStorage.getItem("phor-theme")}catch(e){}if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.setAttribute("data-theme",t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=t==="dark"?"#121A15":"#F7F7F4"})()</script>
+<script>(function(){var t;try{t=localStorage.getItem("phor-theme")}catch(e){}if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.setAttribute("data-theme",t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=t==="dark"?"#121A15":"#F7F7F4";var l=null;try{l=new URLSearchParams(location.search).get("lang")||localStorage.getItem("phor-lang")}catch(e){}if(l==="en"){var d=document.documentElement;d.lang="en";d.classList.add("i18n-pending");setTimeout(function(){d.classList.remove("i18n-pending")},2500)}})()</script>
 <link rel="stylesheet" href="assets/style.css">
 </head>
-<body>
+<body data-page="menu">
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></symbol>
@@ -35,15 +35,16 @@
 
 <header class="site-header">
   <div class="container header-row">
-    <a href="index.html" class="brand brand-logo" id="brand" aria-label="PHOR COFFEE หน้าแรก"><span class="logo" aria-hidden="true"></span></a>
-    <nav class="nav" aria-label="เมนูหลัก">
-      <a href="index.html">ข้อมูล</a>
-      <a href="menu.html" aria-current="page">เมนู</a>
-      <a href="location.html">สถานที่ร้าน</a>
-      <a href="contact.html">ติดต่อ</a>
+    <a href="index.html" class="brand brand-logo" id="brand" data-i18n-attr="aria-label:brand.home" aria-label="PHOR COFFEE หน้าแรก"><span class="logo" aria-hidden="true"></span></a>
+    <nav class="nav" aria-label="เมนูหลัก" data-i18n-attr="aria-label:nav.label">
+      <a href="index.html" data-i18n="nav.info">ข้อมูล</a>
+      <a href="menu.html" aria-current="page" data-i18n="nav.menu">เมนู</a>
+      <a href="location.html" data-i18n="nav.location">สถานที่ร้าน</a>
+      <a href="contact.html" data-i18n="nav.contact">ติดต่อ</a>
     </nav>
     <div class="header-end">
       <div class="status" id="status" aria-live="polite"><span class="dot"></span><span class="txt"></span></div>
+      <div class="lang-select" id="langSelect"><button type="button" class="ls-trigger" aria-haspopup="menu" aria-expanded="false" aria-controls="langMenu"><svg class="ls-globe" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg><span class="ls-current">ไทย</span><svg class="ls-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><ul class="ls-menu" id="langMenu" role="menu"></ul></div>
       <button type="button" class="theme-toggle" id="themeToggle" role="switch" aria-checked="false" aria-label="โหมดมืด"><span class="tg-row"><span class="tg-slot tg-knob"><svg viewBox="0 0 24 24" aria-hidden="true" class="tg-when-light"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" class="tg-when-dark"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span><span class="tg-slot tg-other"><svg viewBox="0 0 24 24" aria-hidden="true" class="tg-when-light"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" class="tg-when-dark"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg></span></span></button>
     </div>
   </div>
@@ -53,7 +54,7 @@
   <article class="page" id="page-menu">
     <div class="container">
       <header class="page-intro">
-        <h1 class="h-page">เมนู</h1>
+        <h1 class="h-page" data-i18n="menu.title">เมนู</h1>
       </header>
       <div class="folders" id="folders"></div>
       <section class="menu-list" id="menuList" aria-live="polite">
@@ -74,11 +75,12 @@
 </footer>
 
 <div class="mobile-bar">
-  <a class="btn btn-secondary" id="barCall"><svg class="i" aria-hidden="true"><use href="#i-phone"/></svg>โทร</a>
-  <a class="btn btn-primary js-line" target="_blank" rel="noopener">ติดต่อ/สอบถาม</a>
+  <a class="btn btn-secondary" id="barCall"><svg class="i" aria-hidden="true"><use href="#i-phone"/></svg><span data-i18n="cta.call">โทร</span></a>
+  <a class="btn btn-primary js-line" target="_blank" rel="noopener" data-i18n="cta.contact">ติดต่อ/สอบถาม</a>
 </div>
 
 <script src="assets/data.js"></script>
+<script src="assets/i18n.js"></script>
 <script src="assets/common.js"></script>
 <script src="assets/menu.js"></script>
 </body>

@@ -43,6 +43,8 @@
   color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:border-box}
+/* ตอนเปิดหน้าเป็นภาษาอังกฤษ ซ่อนไว้ชั่วครู่จนเปลี่ยนข้อความเสร็จ จะไม่เห็นภาษาไทยแวบขึ้นมา */
+html.i18n-pending body{visibility:hidden}
 *{margin:0;padding:0}
 html{-webkit-text-size-adjust:100%;scroll-padding-top:120px}
 body{font-family:'Prompt',system-ui,-apple-system,sans-serif;font-size:var(--fs-md);font-weight:400;line-height:1.7;color:var(--text);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
@@ -90,6 +92,7 @@ h1,h2,h3{font-weight:600;line-height:1.3;letter-spacing:-.005em}
 .nav a[aria-current="page"]{color:var(--text)}
 .nav a[aria-current="page"]::after{content:"";position:absolute;left:18px;right:18px;bottom:-1px;height:2px;background:var(--accent)}
 .header-end{display:flex;align-items:center;gap:18px}
+@media (max-width:1023px){.header-end{gap:10px}}
 .status{display:flex;align-items:center;gap:8px;font-size:var(--fs-sm);color:var(--text-2);white-space:nowrap}
 .status .dot{width:8px;height:8px;border-radius:50%;background:var(--status-off)}
 .status.is-open .dot{background:var(--status-on)}
@@ -132,6 +135,30 @@ main{flex:1}
 
 .about{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,80px);align-items:center}
 .about .ph{aspect-ratio:4/3}
+/* รูปเลื่อนข้างข้อความแนะนำร้าน: รูปใหม่เลื่อนเข้าทับ รูปเดิมเลื่อนออกช้ากว่า (parallax) และหรี่ลงเล็กน้อย */
+.slides{isolation:isolate;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.sl-view{position:absolute;inset:0;overflow:hidden;border-radius:inherit}
+.sl{position:absolute;inset:0;overflow:hidden;background:var(--placeholder);visibility:hidden;transform:translate3d(var(--x,0%),0,0);z-index:1}
+.sl.is-cur,.sl.is-in,.sl.is-out{visibility:visible}
+.sl.is-in{z-index:2}
+.sl img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:translate3d(var(--ix,0%),0,0) scale(var(--sc,1));opacity:0;transition:opacity .6s ease}
+.sl.is-loaded img{opacity:1}
+.sl::after{content:"";position:absolute;inset:0;background:#0B110D;opacity:calc(var(--dim,0) * .32);pointer-events:none}
+.sl.anim,.sl.anim img,.sl.anim::after{transition:transform 1.1s cubic-bezier(.65,0,.35,1),opacity 1.1s cubic-bezier(.65,0,.35,1)}
+.sl.anim.is-loaded img{opacity:1}
+.sl.failed img{display:none}
+/* แถบบอกลำดับรูป: แถบของรูปปัจจุบันค่อยๆ เต็มใน 5 วินาที  กดเพื่อไปรูปนั้น */
+.slides::after{content:"";position:absolute;left:0;right:0;bottom:0;height:72px;z-index:3;pointer-events:none;border-radius:0 0 var(--r-md) var(--r-md);background:linear-gradient(to top,rgba(10,16,12,.38),rgba(10,16,12,0))}
+.sl-dots{position:absolute;left:0;right:0;bottom:10px;z-index:4;display:flex;justify-content:center;gap:4px}
+.sl-dot{display:grid;place-items:center;width:34px;height:28px;padding:0;border-radius:6px}
+.sl-dot i{position:relative;display:block;width:24px;height:3px;border-radius:2px;overflow:hidden;background:rgba(255,255,255,.4);transition:background-color .2s}
+.sl-dot:hover i{background:rgba(255,255,255,.65)}
+.sl-dot i::after{content:"";position:absolute;inset:0;border-radius:inherit;background:#fff;transform:scaleX(0);transform-origin:left center}
+.sl-dot.is-cur i::after{animation:sl-fill 5s linear forwards}
+.slides.is-held .sl-dot.is-cur i::after{animation-play-state:paused}
+@keyframes sl-fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.sl-dot:focus-visible{outline:2px solid #fff;outline-offset:0}
+@media (prefers-reduced-motion:reduce){.sl-dot.is-cur i::after{transform:scaleX(1)}}
 .quick{margin-top:32px;border-top:1px solid var(--line);max-width:440px}
 .quick div{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid var(--line);font-size:15px}
 .quick dt{color:var(--text-2)}
@@ -154,6 +181,7 @@ main{flex:1}
 .quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:36px;list-style:none}
 .quotes li{border-top:2px solid var(--accent);padding-top:18px}
 .quotes blockquote{font-size:17px;line-height:1.65;text-wrap:pretty}
+.quotes-note{margin-top:28px;font-size:var(--fs-sm);color:var(--text-2)}
 @media (max-width:699px){.quotes{grid-template-columns:1fr;gap:24px}}
 
 /* ===== หน้า: เมนู ===== */
@@ -353,6 +381,29 @@ html.lb-lock{overflow:hidden}
 .site-footer{background:var(--footer-bg);color:var(--footer-text);box-shadow:inset 0 1px 0 var(--footer-line);font-size:var(--fs-sm);padding:32px 0}
 .footer-grid{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px}
 .site-footer .brand{color:var(--footer-strong);font-size:16px}
+
+/* ---------- ปุ่มเลือกภาษา: ดัดแปลงจากคอมโพเนนต์ Language Selector Dropdown (ปุ่มแคปซูล + รายการที่มีเครื่องหมายถูก) ---------- */
+.lang-select{position:relative;flex:none}
+.ls-trigger{display:flex;align-items:center;gap:6px;height:32px;padding:0 10px 0 11px;border-radius:999px;border:1px solid var(--tg-border);background:var(--tg-track);
+  color:var(--text);font-size:13px;font-weight:500;line-height:1;white-space:nowrap;transition:background-color .2s,border-color .2s}
+.ls-trigger:hover{background:var(--accent-soft)}
+.ls-trigger:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:999px}
+.ls-trigger svg{flex:none;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+.ls-globe{width:15px;height:15px;stroke-width:1.6;color:var(--text-2)}
+.ls-chev{width:14px;height:14px;stroke-width:2;color:var(--text-2);transition:transform .2s}
+.lang-select[data-open] .ls-chev{transform:rotate(180deg)}
+.ls-menu{position:absolute;right:0;top:calc(100% + 8px);z-index:60;min-width:168px;padding:6px;list-style:none;border-radius:14px;
+  background:var(--surface);border:1px solid var(--line);box-shadow:0 14px 34px -12px rgba(20,30,24,.28),0 2px 6px rgba(20,30,24,.06);
+  opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .16s ease,transform .16s ease,visibility 0s linear .16s}
+.lang-select[data-open] .ls-menu{opacity:1;visibility:visible;transform:none;transition:opacity .16s ease,transform .16s ease}
+.ls-item{display:flex;align-items:center;gap:10px;width:100%;min-height:40px;padding:0 12px;border-radius:9px;font-size:14px;color:var(--text);text-align:left;transition:background-color .12s}
+.ls-item:hover,.ls-item:focus-visible{background:var(--accent-soft);outline:none}
+.ls-label{flex:1}
+.ls-check{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;visibility:hidden}
+.ls-item.is-on{font-weight:600;color:var(--accent)}
+.ls-item.is-on .ls-check{visibility:visible}
+:root[data-theme="dark"] .ls-menu{box-shadow:0 18px 40px -12px rgba(0,0,0,.75)}
+@media (max-width:699px){.ls-trigger{padding:0 9px}.ls-globe{display:none}}
 
 /* ---------- ปุ่มสลับโหมด: ดัดแปลงจากคอมโพเนนต์ ThemeToggle (ขนาด 64×32 ปุ่มกลม 24 ไอคอน Sun/Moon ของ lucide) ---------- */
 .theme-toggle{display:flex;flex:none;box-sizing:border-box;width:64px;height:32px;padding:4px;border-radius:999px;cursor:pointer;background:var(--tg-track);border:1px solid var(--tg-border);transition:background-color .3s,border-color .3s}

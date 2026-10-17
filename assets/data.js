@@ -1,4 +1,5 @@
-/* PHOR COFFEE: ข้อมูลร้าน (แก้ที่ไฟล์นี้ไฟล์เดียว ทุกหน้าจะเปลี่ยนตาม) */
+/* PHOR COFFEE: ข้อมูลร้าน (แก้ที่ไฟล์นี้ไฟล์เดียว ทุกหน้าจะเปลี่ยนตาม)
+   ช่องที่ลงท้ายด้วย En คือข้อความภาษาอังกฤษของช่องเดียวกัน ถ้าแก้ภาษาไทยให้แก้ภาษาอังกฤษด้วย */
 /* =================================================================
    ข้อมูลร้าน: แก้ที่นี่ที่เดียว ทั้งเว็บจะเปลี่ยนตาม
    ================================================================= */
@@ -29,7 +30,18 @@ const PHOTO = {   // รูปจาก Google Maps ของร้าน (ใ�
 const SITE = {
   name: "PHOR COFFEE",
   aboutTitle: "ร้านกาแฟริมถนนร่มเกล้า 1",
+  aboutTitleEn: "A coffee shop on Rom Klao 1 Road",
   about: "ในร้านเปิดแอร์ ข้างนอกมีที่นั่งใต้ต้นไม้ใหญ่ มีกาแฟ มัทฉะ และขนมอบทุกวัน",
+  aboutEn: "Air-conditioned seating inside and tables under a big tree outside. Coffee, matcha and fresh bakes every day.",
+
+  // รูปที่เลื่อนเปลี่ยนเองทุก 5 วินาที ข้างข้อความแนะนำร้าน (หน้าข้อมูล)  pos = จุดโฟกัสของรูป
+  aboutPhotos: [
+    { img: PHOTO.bar,          pos: "50% 50%", alt: "เคาน์เตอร์บาร์กาแฟภายในร้าน",  altEn: "Coffee bar counter inside the shop" },
+    { img: PHOTO.latteCrumble, pos: "50% 48%", alt: "ลาเต้เย็นกับเค้กแอปเปิลครัมเบิล", altEn: "Iced latte with apple crumble cake" },
+    { img: PHOTO.hotLatte,     pos: "50% 62%", alt: "ลาเต้ร้อนกับน้ำเปล่า",          altEn: "Hot latte with a glass of water" },
+    { img: PHOTO.icedMatcha,   pos: "50% 72%", alt: "มัทฉะลาเต้เย็น",               altEn: "Iced matcha latte" },
+    { img: PHOTO.appleCrumble, pos: "50% 80%", alt: "เค้กแอปเปิลครัมเบิล",           altEn: "Apple crumble cake" },
+  ],
 
   // index 0 = อาทิตย์ ... 6 = เสาร์  ใส่ null ถ้าวันนั้นปิด
   hours: Array(7).fill(["07:30", "18:00"]),
@@ -40,43 +52,50 @@ const SITE = {
     "ร้านกาแฟเล็ก ๆ แต่บรรยากาศดี กาแฟดีมาก พนักงานเป็นกันเอง บริการดี",
     "กาแฟหอมกรุ่น พนักงานน่ารัก อัธยาศัยดี",
   ],
+  quotesEn: [   // แปลจากรีวิวด้านบน เรียงลำดับเดียวกัน
+    "Great atmosphere and polite staff. Many of the cakes and drinks are delicious.",
+    "A small coffee shop with a great atmosphere. Excellent coffee, friendly staff and good service.",
+    "Fragrant coffee, lovely staff and a warm welcome.",
+  ],
 
   // เมนู: ชื่อมาจากรูปและรีวิวของร้าน แต่ "ราคาเป็นตัวเลขสมมติ" ต้องเปลี่ยนเป็นราคาจริงก่อนให้ร้านดู
   // แต่ละหมวดคือแฟ้ม 1 อัน  cover = รูปในแฟ้ม  img = รูปของเมนูนั้น  pos = จุดโฟกัสของรูป (แนวนอน แนวตั้ง)
   // ในแฟ้มโชว์ได้ 4 แผ่น: เลือกเมนูที่มีรูปก่อน ที่เหลือเรียงตามลำดับ  รายการเต็มอยู่ใต้แฟ้ม
   // เมนูที่มีรูป กดที่แผ่นในแฟ้มหรือรูปย่อในรายการ จะเปิดดูรูปใหญ่
   menu: [
-    { id: "coffee", group: "กาแฟ", cover: { img: PHOTO.signature, pos: "50% 85%" }, items: [
-      { name: "เอสเปรสโซ", price: 55 },
-      { name: "อเมริกาโน่", desc: "ร้อน / เย็น", price: 65, img: PHOTO.iced, pos: "50% 65%" },
-      { name: "ลาเต้", desc: "ร้อน / เย็น", price: 75, img: PHOTO.hotLatte, pos: "50% 59%" },
-      { name: "ลาเต้เย็นรสพิเศษ", desc: "วานิลลา / มาร่อน / มะพร้าว", price: 85, img: PHOTO.latteFlavours, pos: "50% 76%" },
-      { name: "เดอร์ตี้", desc: "เอสเปรสโซช็อตบนนมเย็น", price: 95, img: PHOTO.dirty, pos: "50% 80%" },
-      { name: "คาปูชิโน่", desc: "ร้อน / เย็น", price: 75 },
-      { name: "มอคค่า", desc: "เย็น", price: 85 },
-      { name: "กาแฟดริป", price: 120 },
+    { id: "coffee", group: "กาแฟ", groupEn: "Coffee", cover: { img: PHOTO.signature, pos: "50% 85%" }, items: [
+      { name: "เอสเปรสโซ", nameEn: "Espresso", price: 55 },
+      { name: "อเมริกาโน่", nameEn: "Americano", desc: "ร้อน / เย็น", descEn: "Hot / Iced", price: 65, img: PHOTO.iced, pos: "50% 65%" },
+      { name: "ลาเต้", nameEn: "Latte", desc: "ร้อน / เย็น", descEn: "Hot / Iced", price: 75, img: PHOTO.hotLatte, pos: "50% 59%" },
+      { name: "ลาเต้เย็นรสพิเศษ", nameEn: "Flavored Iced Latte", desc: "วานิลลา / มาร่อน / มะพร้าว", descEn: "Vanilla / Marron / Coconut", price: 85, img: PHOTO.latteFlavours, pos: "50% 76%" },
+      { name: "เดอร์ตี้", nameEn: "Dirty Coffee", desc: "เอสเปรสโซช็อตบนนมเย็น", descEn: "Espresso shot over cold milk", price: 95, img: PHOTO.dirty, pos: "50% 80%" },
+      { name: "คาปูชิโน่", nameEn: "Cappuccino", desc: "ร้อน / เย็น", descEn: "Hot / Iced", price: 75 },
+      { name: "มอคค่า", nameEn: "Mocha", desc: "เย็น", descEn: "Iced", price: 85 },
+      { name: "กาแฟดริป", nameEn: "Drip Coffee", price: 120 },
     ]},
-    { id: "drinks", group: "เครื่องดื่ม", cover: { img: PHOTO.matcha, pos: "50% 90%" }, items: [
-      { name: "มัทฉะลาเต้", desc: "เย็น", price: 90, img: PHOTO.icedMatcha, pos: "50% 70%" },
-      { name: "ช็อกโกแลตเย็น", desc: "ดาร์กช็อกโกแลตเบลเยียม", price: 85, img: PHOTO.icedChoc, pos: "50% 61%" },
-      { name: "โซดาผลไม้", desc: "เย็น", price: 70, img: PHOTO.soda, pos: "50% 87%" },
-      { name: "ชาไทย", desc: "เย็น", price: 65 },
+    { id: "drinks", group: "เครื่องดื่ม", groupEn: "Drinks", cover: { img: PHOTO.matcha, pos: "50% 90%" }, items: [
+      { name: "มัทฉะลาเต้", nameEn: "Matcha Latte", desc: "เย็น", descEn: "Iced", price: 90, img: PHOTO.icedMatcha, pos: "50% 70%" },
+      { name: "ช็อกโกแลตเย็น", nameEn: "Iced Chocolate", desc: "ดาร์กช็อกโกแลตเบลเยียม", descEn: "Belgian dark chocolate", price: 85, img: PHOTO.icedChoc, pos: "50% 61%" },
+      { name: "โซดาผลไม้", nameEn: "Fruit Soda", desc: "เย็น", descEn: "Iced", price: 70, img: PHOTO.soda, pos: "50% 87%" },
+      { name: "ชาไทย", nameEn: "Thai Tea", desc: "เย็น", descEn: "Iced", price: 65 },
     ]},
-    { id: "desserts", group: "ขนมหวาน", cover: { img: PHOTO.cake, pos: "50% 30%" }, items: [
-      { name: "ครัวซองต์เนย", price: 75 },
-      { name: "มัฟฟินบลูเบอร์รี่ครัมเบิล", price: 85, img: PHOTO.muffin, pos: "50% 90%" },
-      { name: "เค้กมัทฉะ", price: 110, img: PHOTO.cake, pos: "50% 20%" },
-      { name: "เค้กแอปเปิลครัมเบิล", price: 95, img: PHOTO.appleCrumble, pos: "50% 74%" },
-      { name: "เซ็ตกาแฟร้อนกับเบเกอรี่", desc: "กาแฟร้อนคู่เบเกอรี่", price: 129, img: PHOTO.bakerySet, pos: "50% 70%" },
-      { name: "บาสก์ชีสเค้ก", price: 120 },
+    { id: "desserts", group: "ขนมหวาน", groupEn: "Desserts", cover: { img: PHOTO.cake, pos: "50% 30%" }, items: [
+      { name: "ครัวซองต์เนย", nameEn: "Butter Croissant", price: 75 },
+      { name: "มัฟฟินบลูเบอร์รี่ครัมเบิล", nameEn: "Blueberry Crumble Muffin", price: 85, img: PHOTO.muffin, pos: "50% 90%" },
+      { name: "เค้กมัทฉะ", nameEn: "Matcha Cake", price: 110, img: PHOTO.cake, pos: "50% 20%" },
+      { name: "เค้กแอปเปิลครัมเบิล", nameEn: "Apple Crumble Cake", price: 95, img: PHOTO.appleCrumble, pos: "50% 74%" },
+      { name: "เซ็ตกาแฟร้อนกับเบเกอรี่", nameEn: "Coffee & Bakery Set", desc: "กาแฟร้อนคู่เบเกอรี่", descEn: "Hot coffee paired with a pastry", price: 129, img: PHOTO.bakerySet, pos: "50% 70%" },
+      { name: "บาสก์ชีสเค้ก", nameEn: "Basque Cheesecake", price: 120 },
     ]},
   ],
   menuFoot: "",     // ข้อความท้ายเมนู เช่น เงื่อนไขราคา (ว่างไว้ = ไม่แสดง)
 
   address: "62/2 ถนนร่มเกล้า 1 แขวงคลองสองต้นนุ่น เขตลาดกระบัง กรุงเทพมหานคร 10520",
+  addressEn: "62/2 Rom Klao 1 Road, Khlong Song Ton Nun, Lat Krabang, Bangkok 10520",
   lat: 13.731199, lng: 100.7211521,
   gmapsUrl: "https://maps.app.goo.gl/8rWYxtbHiZkrK4PL9",
   parking: "มีที่จอดรถหน้าร้าน",
+  parkingEn: "Parking in front of the shop",
 
   phone: "0909359566",
   phoneDisplay: "090 935 9566",
